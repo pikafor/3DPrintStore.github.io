@@ -130,6 +130,25 @@
             opacity: 0.8;
         }
 
+        /* ===== Анимации течения ===== */
+        @keyframes flowStripes {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 100px 100px;
+            }
+        }
+
+        @keyframes flowStripesReverse {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: -100px -100px;
+            }
+        }
+
         /* ===== Стильный фон для калькулятора ===== */
         .calculator-section {
             padding: 80px 0;
@@ -152,10 +171,10 @@
                 rgba(30, 58, 138, 0.03) 15px,
                 rgba(30, 58, 138, 0.03) 30px
             );
-            background-size: 100px 100px;
+            background-size: 42px 42px;
             pointer-events: none;
             z-index: 1;
-            animation: flowStripes 30s linear infinite;
+            animation: flowStripes 8s linear infinite;
         }
 
         .calculator-section::after {
@@ -196,10 +215,10 @@
                 rgba(30, 58, 138, 0.03) 15px,
                 rgba(30, 58, 138, 0.03) 30px
             );
-            background-size: 100px 100px;
+            background-size: 42px 42px;
             pointer-events: none;
             z-index: 1;
-            animation: flowStripesReverse 30s linear infinite;
+            animation: flowStripesReverse 5s linear infinite;
         }
 
         .materials-section::after {
@@ -254,10 +273,10 @@
                 rgba(30, 58, 138, 0.03) 15px,
                 rgba(30, 58, 138, 0.03) 30px
             );
-            background-size: 100px 100px;
+            background-size: 42px 42px;
             pointer-events: none;
             z-index: 1;
-            animation: flowStripes 30s linear infinite;
+            animation: flowStripes 6s linear infinite;
         }
 
         .reviews-portfolio-wrapper::after {
@@ -277,8 +296,7 @@
         }
 
         /* Темная тема для всех секций */
-        [data-theme="dark"] .calculator-section::before,
-        [data-theme="dark"] .reviews-portfolio-wrapper::before {
+        [data-theme="dark"] .calculator-section::before {
             background: repeating-linear-gradient(
                 45deg,
                 transparent,
@@ -286,7 +304,7 @@
                 rgba(59, 130, 246, 0.05) 15px,
                 rgba(59, 130, 246, 0.05) 30px
             );
-            background-size: 100px 100px;
+            background-size: 42px 42px;
         }
 
         [data-theme="dark"] .materials-section::before {
@@ -297,7 +315,18 @@
                 rgba(59, 130, 246, 0.05) 15px,
                 rgba(59, 130, 246, 0.05) 30px
             );
-            background-size: 100px 100px;
+            background-size: 42px 42px;
+        }
+
+        [data-theme="dark"] .reviews-portfolio-wrapper::before {
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 15px,
+                rgba(59, 130, 246, 0.05) 15px,
+                rgba(59, 130, 246, 0.05) 30px
+            );
+            background-size: 42px 42px;
         }
 
         [data-theme="dark"] .calculator-section::after,
@@ -315,112 +344,6 @@
                 rgba(59, 130, 246, 0.15) 0%,
                 transparent 70%
             );
-        }
-
-        /* Анимации течения - исправлено */
-        @keyframes flowStripes {
-            0% {
-                background-position: 0 0;
-            }
-            100% {
-                background-position: 100px 100px;
-            }
-        }
-
-        @keyframes flowStripesReverse {
-            0% {
-                background-position: 0 0;
-            }
-            100% {
-                background-position: -100px -100px;
-            }
-        }
-
-        /* Применение к калькулятору */
-        .calculator-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 15px,
-                rgba(30, 58, 138, 0.03) 15px,
-                rgba(30, 58, 138, 0.03) 30px
-            );
-            background-size: 42px 42px; /* Размер паттерна */
-            pointer-events: none;
-            z-index: 1;
-            animation: flowStripes 60s linear infinite;
-        }
-
-        /* Применение к материалам */
-        .materials-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: repeating-linear-gradient(
-                -45deg,
-                transparent,
-                transparent 15px,
-                rgba(30, 58, 138, 0.03) 15px,
-                rgba(30, 58, 138, 0.03) 30px
-            );
-            background-size: 42px 42px;
-            pointer-events: none;
-            z-index: 1;
-            animation: flowStripesReverse 60s linear infinite;
-        }
-
-        /* Применение к общему блоку отзывов и работ */
-        .reviews-portfolio-wrapper::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 15px,
-                rgba(30, 58, 138, 0.03) 15px,
-                rgba(30, 58, 138, 0.03) 30px
-            );
-            background-size: 42px 42px;
-            pointer-events: none;
-            z-index: 1;
-            animation: flowStripes 60s linear infinite;
-        }
-
-        /* Темная тема */
-        [data-theme="dark"] .calculator-section::before,
-        [data-theme="dark"] .reviews-portfolio-wrapper::before {
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 15px,
-                rgba(59, 130, 246, 0.05) 15px,
-                rgba(59, 130, 246, 0.05) 30px
-            );
-            background-size: 42px 42px;
-        }
-
-        [data-theme="dark"] .materials-section::before {
-            background: repeating-linear-gradient(
-                -45deg,
-                transparent,
-                transparent 15px,
-                rgba(59, 130, 246, 0.05) 15px,
-                rgba(59, 130, 246, 0.05) 30px
-            );
-            background-size: 42px 42px;
         }
 
         /* ===== Сетка для остальных секций ===== */
@@ -1848,7 +1771,6 @@
             overflow: hidden;
         }
 
-        /* Тонкая сетка для футера */
         .footer::before {
             content: '';
             position: absolute;
@@ -1865,7 +1787,6 @@
             animation: subtleFlow 120s linear infinite;
         }
 
-        /* Точки на пересечениях */
         .footer::after {
             content: '';
             position: absolute;
@@ -1880,7 +1801,6 @@
             animation: subtleFlowReverse 120s linear infinite;
         }
 
-        /* Контент футера выше фона */
         .footer .container {
             position: relative;
             z-index: 1;
@@ -1928,31 +1848,6 @@
             transition: all 0.2s;
             position: relative;
             z-index: 1;
-        }
-
-        .social-links a:hover {
-            background: var(--accent-primary);
-            color: white;
-            transform: translateY(-3px);
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 30px 0 20px;
-        }
-
-        .social-links a {
-            width: 40px;
-            height: 40px;
-            border-radius: 40px;
-            background: var(--bg-tertiary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-secondary);
-            transition: all 0.2s;
         }
 
         .social-links a:hover {
@@ -2960,7 +2855,7 @@
             scene.add(backLight);
             
             const gridHelper = new THREE.GridHelper(20, 20, 0x1e3a8a, 0x94a3b8);
-            gridHelper.position.y = -1.5;
+            gridHelper.position.y = 0.32;
             scene.add(gridHelper);
             
             const controls = new OrbitControls(camera, renderer.domElement);
