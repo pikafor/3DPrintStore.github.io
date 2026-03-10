@@ -33,6 +33,10 @@
             --invert-percent: 0%;
             --grid-color: rgba(30, 58, 138, 0.03);
             --dots-color: rgba(30, 58, 138, 0.02);
+            --tooltip-bg: var(--bg-primary);
+            --tooltip-text: var(--text-primary);
+            --star-color: #fbbf24;
+            --star-empty: #e2e8f0;
         }
 
         /* Темная тема */
@@ -59,6 +63,9 @@
             --invert-percent: 80%;
             --grid-color: rgba(59, 130, 246, 0.05);
             --dots-color: rgba(59, 130, 246, 0.03);
+            --tooltip-bg: #1e293b;
+            --tooltip-text: #f8fafc;
+            --star-empty: #334155;
         }
 
         /* ===== Фоновые элементы ===== */
@@ -107,17 +114,23 @@
             opacity: 0.8;
         }
 
-        .navbar, .hero, .services, .materials, .stats, .portfolio, .faq, .contact, .footer {
+        /* Все контенты выше фона */
+        .navbar, .hero, .services, .materials, .stats, .portfolio, .faq, .contact, .footer,
+        .calculator-section, .reviews-section, .features-section, .comparison-section {
             position: relative;
             z-index: 2;
             background: transparent;
         }
 
-        .service-card, .material-card, .portfolio-item, .faq-item, .contact-grid {
+        /* Карточки с полупрозрачным фоном */
+        .service-card, .material-card, .portfolio-item, .faq-item, .contact-grid,
+        .calculator-card, .review-card, .feature-card {
             backdrop-filter: blur(10px);
             background: rgba(var(--bg-primary), 0.8);
+            border: 1px solid var(--card-border);
         }
 
+        /* ===== Базовые стили ===== */
         * {
             margin: 0;
             padding: 0;
@@ -217,6 +230,7 @@
             font-size: 1.125rem;
         }
 
+        /* ===== Навигация ===== */
         .navbar {
             padding: 20px 0;
             position: sticky;
@@ -356,6 +370,7 @@
             pointer-events: auto;
         }
 
+        /* ===== Hero секция ===== */
         .hero {
             padding: 60px 0 80px;
             position: relative;
@@ -426,6 +441,7 @@
             margin-right: 4px;
         }
 
+        /* ===== 3D Viewer с реальной моделью ===== */
         .model-container {
             width: 100%;
             height: min(500px, 60vw);
@@ -507,16 +523,397 @@
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
             z-index: 30;
+            display: none;
         }
 
         @keyframes spin {
             to { transform: translate(-50%, -50%) rotate(360deg); }
         }
 
+        /* ===== Калькулятор стоимости с кастомными селектами ===== */
+        .calculator-section {
+            padding: 80px 0;
+            background: var(--bg-secondary);
+        }
+
+        .calculator-card {
+            border: 1px solid var(--card-border);
+            border-radius: 32px;
+            padding: 40px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .calculator-form {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .input-label i {
+            color: var(--accent-primary);
+            font-size: 0.9rem;
+        }
+
+        /* ===== КАСТОМНЫЙ СЕЛЕКТ ===== */
+        .custom-select {
+            position: relative;
+            width: 100%;
+            user-select: none;
+        }
+
+        .select-selected {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 16px 20px;
+            padding-right: 45px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .select-selected:hover {
+            border-color: var(--accent-primary);
+            background: var(--bg-secondary);
+        }
+
+        .select-selected::after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent-primary);
+            font-size: 0.9rem;
+            transition: transform 0.3s;
+        }
+
+        .select-selected.active::after {
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        .select-items {
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 0;
+            right: 0;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            overflow: hidden;
+            z-index: 10;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .select-items.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .select-item {
+            padding: 14px 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-primary);
+            font-size: 1rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .select-item:last-child {
+            border-bottom: none;
+        }
+
+        .select-item:hover {
+            background: var(--accent-soft);
+            color: var(--accent-primary);
+            padding-left: 25px;
+        }
+
+        .select-item.selected {
+            background: var(--accent-primary);
+            color: white;
+            font-weight: 500;
+        }
+
+        .select-item.selected:hover {
+            background: var(--accent-secondary);
+            color: white;
+        }
+
+        .select-items::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .select-items::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+            border-radius: 0 16px 16px 0;
+        }
+
+        .select-items::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 4px;
+        }
+
+        .select-items::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-secondary);
+        }
+
+        /* Количество и вес */
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 4px;
+            width: 100%;
+        }
+
+        .quantity-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            border: none;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .quantity-btn:hover {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .quantity-input {
+            width: 100%;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: none;
+            background: transparent;
+            color: var(--text-primary);
+            flex: 1;
+            min-width: 60px;
+        }
+
+        .quantity-input::-webkit-inner-spin-button,
+        .quantity-input::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .input-hint {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 4px;
+            padding-left: 4px;
+        }
+
+        .input-hint i {
+            color: var(--accent-primary);
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+
+        .total-price {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            padding: 30px;
+            border-radius: 24px;
+            text-align: center;
+            color: white;
+            margin-top: 20px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .total-price .label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .total-price .price {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .total-price .currency {
+            font-size: 1.5rem;
+            margin-left: 8px;
+            opacity: 0.9;
+        }
+
+        .total-price .hint {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .total-price .hint i {
+            font-size: 0.9rem;
+        }
+
+        /* ===== Преимущества ===== */
+        .features-section {
+            padding: 80px 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            border-radius: 24px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 70px;
+            background: var(--accent-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            color: var(--accent-primary);
+        }
+
+        /* ===== Отзывы ===== */
+        .reviews-section {
+            padding: 80px 0;
+            background: var(--bg-secondary);
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .review-card {
+            border-radius: 24px;
+            padding: 30px;
+            transition: all 0.3s;
+        }
+
+        .review-card:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .rating {
+            color: var(--star-color);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .review-text {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .reviewer {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .reviewer-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50px;
+            background: var(--accent-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .reviewer-info h4 {
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .reviewer-info p {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+        }
+
+        /* ===== Услуги ===== */
         .services {
             padding: 100px 0;
-            position: relative;
-            z-index: 2;
         }
 
         .services-grid {
@@ -527,19 +924,15 @@
         }
 
         .service-card {
-            border: 1px solid var(--card-border);
             border-radius: 24px;
             padding: 32px;
             transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            background: rgba(var(--bg-primary), 0.7);
         }
 
         .service-card:hover {
             transform: translateY(-4px);
             border-color: var(--accent-primary);
             box-shadow: var(--shadow-lg);
-            background: rgba(var(--bg-primary), 0.9);
         }
 
         .service-icon {
@@ -572,10 +965,35 @@
             font-size: 0.8rem;
         }
 
+        /* ===== Материалы ===== */
         .materials {
             padding: 100px 0;
-            position: relative;
-            z-index: 2;
+        }
+
+        .material-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 30px 0;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 8px 20px;
+            border-radius: 40px;
+            border: 1px solid var(--border-light);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
         }
 
         .materials-grid {
@@ -586,18 +1004,93 @@
         }
 
         .material-card {
-            border: 1px solid var(--border-light);
             border-radius: 16px;
             padding: 24px 20px;
             text-align: center;
             transition: all 0.2s;
-            backdrop-filter: blur(10px);
-            background: rgba(var(--bg-primary), 0.7);
+            position: relative;
+            cursor: help;
         }
 
         .material-card:hover {
             border-color: var(--accent-primary);
-            background: rgba(var(--bg-primary), 0.9);
+        }
+
+        .material-tooltip {
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--tooltip-bg);
+            border: 1px solid var(--accent-primary);
+            border-radius: 12px;
+            padding: 16px;
+            width: 260px;
+            font-size: 0.9rem;
+            color: var(--tooltip-text);
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s;
+            pointer-events: none;
+            z-index: 10;
+            text-align: left;
+            backdrop-filter: blur(10px);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+            white-space: normal;
+            max-width: 90vw;
+        }
+
+        .material-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px;
+            border-style: solid;
+            border-color: var(--accent-primary) transparent transparent transparent;
+        }
+
+        .material-tooltip h5 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .material-tooltip p {
+            margin: 8px 0;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .material-tooltip .properties {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 12px 0 8px;
+        }
+
+        .material-tooltip .property {
+            background: var(--accent-soft);
+            color: var(--accent-primary);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        @media (hover: hover) {
+            .material-card:hover .material-tooltip {
+                opacity: 1;
+                visibility: visible;
+                bottom: calc(100% + 15px);
+            }
         }
 
         .material-color {
@@ -619,38 +1112,10 @@
             color: var(--text-tertiary);
         }
 
-        .stats {
-            padding: 80px 0;
-            position: relative;
-            z-index: 2;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 40px;
-            text-align: center;
-        }
-
-        .stat-item .number {
-            font-size: 2.5rem;
-            font-weight: 600;
-            color: var(--accent-primary);
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-
-        .stat-item .label {
-            font-size: 0.9rem;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
+        /* ===== Портфолио ===== */
         .portfolio {
             padding: 100px 0;
-            position: relative;
-            z-index: 2;
+            background: var(--bg-secondary);
         }
 
         .portfolio-grid {
@@ -661,19 +1126,15 @@
         }
 
         .portfolio-item {
-            border: 1px solid var(--card-border);
             border-radius: 24px;
             overflow: hidden;
             transition: all 0.3s;
-            backdrop-filter: blur(10px);
-            background: rgba(var(--bg-primary), 0.7);
         }
 
         .portfolio-item:hover {
             transform: translateY(-4px);
             border-color: var(--accent-primary);
             box-shadow: var(--shadow-lg);
-            background: rgba(var(--bg-primary), 0.9);
         }
 
         .portfolio-image {
@@ -703,10 +1164,68 @@
             font-size: 0.9rem;
         }
 
+        /* ===== Таблица сравнения со стильными звездами ===== */
+        .comparison-section {
+            padding: 80px 0;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 40px;
+            background: rgba(var(--bg-primary), 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .comparison-table th {
+            background: var(--accent-soft);
+            color: var(--accent-primary);
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table td {
+            color: var(--text-secondary);
+        }
+
+        .comparison-table td strong {
+            color: var(--text-primary);
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 4px;
+        }
+
+        .star {
+            color: var(--star-empty);
+            font-size: 1.1rem;
+            transition: color 0.2s;
+        }
+
+        .star.filled {
+            color: var(--star-color);
+        }
+
+        /* ===== FAQ ===== */
         .faq {
             padding: 100px 0;
-            position: relative;
-            z-index: 2;
+            background: var(--bg-secondary);
         }
 
         .faq-grid {
@@ -717,18 +1236,14 @@
         }
 
         .faq-item {
-            border: 1px solid var(--card-border);
             border-radius: 20px;
             padding: 24px;
             cursor: pointer;
             transition: all 0.2s;
-            backdrop-filter: blur(10px);
-            background: rgba(var(--bg-primary), 0.7);
         }
 
         .faq-item:hover {
             border-color: var(--accent-primary);
-            background: rgba(var(--bg-primary), 0.9);
         }
 
         .faq-question {
@@ -759,10 +1274,9 @@
             display: block;
         }
 
+        /* ===== Контакты ===== */
         .contact {
             padding: 100px 0;
-            position: relative;
-            z-index: 2;
         }
 
         .contact-grid {
@@ -771,9 +1285,6 @@
             gap: 50px;
             border-radius: 32px;
             padding: 60px;
-            border: 1px solid var(--border-light);
-            backdrop-filter: blur(10px);
-            background: rgba(var(--bg-primary), 0.7);
         }
 
         .contact-info p {
@@ -812,23 +1323,196 @@
             box-shadow: 0 0 0 3px var(--accent-soft);
         }
 
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: var(--text-tertiary);
+        /* ===== Кнопка наверх ===== */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.2s;
+            z-index: 99;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: var(--shadow-lg);
         }
 
+        .scroll-top:hover {
+            transform: translateY(-3px);
+            background: var(--accent-secondary);
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+        }
+
+        /* ===== Чат ===== */
+        .chat-widget {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            z-index: 98;
+        }
+
+        .chat-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 60px;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.2s;
+        }
+
+        .chat-toggle:hover {
+            transform: scale(1.1);
+            background: var(--accent-secondary);
+        }
+
+        .chat-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 320px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            display: none;
+        }
+
+        .chat-window.active {
+            display: block;
+        }
+
+        .chat-header {
+            padding: 20px;
+            background: var(--accent-soft);
+            color: var(--accent-primary);
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .chat-messages {
+            height: 300px;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .chat-message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+        }
+
+        .chat-message.support {
+            background: var(--accent-soft);
+            color: var(--text-primary);
+        }
+
+        .chat-message.user {
+            background: var(--accent-primary);
+            color: white;
+            margin-left: auto;
+        }
+
+        .chat-input {
+            padding: 15px;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid var(--border-light);
+            border-radius: 40px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .chat-input button {
+            width: 40px;
+            height: 40px;
+            border-radius: 40px;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* ===== Footer ===== */
         .footer {
-            padding: 40px 0;
+            padding: 60px 0 40px;
             text-align: center;
             color: var(--text-tertiary);
             border-top: 1px solid var(--border-light);
-            font-size: 0.9rem;
             position: relative;
             z-index: 2;
             backdrop-filter: blur(10px);
             background: rgba(var(--bg-primary), 0.5);
         }
 
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0 20px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 40px;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .social-links a:hover {
+            background: var(--accent-primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* ===== Toast ===== */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -851,15 +1535,28 @@
             opacity: 1;
         }
 
+        /* ===== Анимации ===== */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s, transform 0.6s;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== Адаптивность ===== */
         @media (max-width: 1024px) {
             .container { padding: 0 24px; }
             .hero-grid { gap: 40px; }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .reviews-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (max-width: 768px) {
-            .burger { 
-                display: block; 
-            }
+            .burger { display: block; }
             
             .nav-links {
                 position: fixed;
@@ -878,66 +1575,58 @@
                 z-index: 99;
             }
 
-            .nav-links.active { 
-                right: 0; 
-            }
+            .nav-links.active { right: 0; }
 
-            .nav-links a {
-                font-size: 1.1rem;
-            }
+            .nav-links a { font-size: 1.1rem; }
 
-            .theme-switch {
-                margin-top: 20px;
-            }
+            .theme-switch { margin-top: 20px; }
 
-            .hero-grid { 
-                grid-template-columns: 1fr; 
+            .hero-grid { grid-template-columns: 1fr; }
+            
+            .hero-features { justify-content: space-around; }
+            
+            .features-grid { grid-template-columns: 1fr; }
+            
+            .reviews-grid { grid-template-columns: 1fr; }
+            
+            .form-row { grid-template-columns: 1fr; }
+            
+            .faq-grid { grid-template-columns: 1fr; }
+            
+            .contact-grid { grid-template-columns: 1fr; padding: 40px; }
+            
+            .comparison-table {
+                font-size: 0.85rem;
             }
             
-            .hero-features { 
-                justify-content: space-around; 
-            }
-            
-            .stats-grid { 
-                grid-template-columns: repeat(2, 1fr); 
-                gap: 30px; 
-            }
-            
-            .faq-grid { 
-                grid-template-columns: 1fr; 
-            }
-            
-            .contact-grid { 
-                grid-template-columns: 1fr; 
-                padding: 40px; 
+            .comparison-table th,
+            .comparison-table td {
+                padding: 12px 8px;
             }
         }
 
         @media (max-width: 480px) {
-            .container { 
-                padding: 0 16px; 
+            .container { padding: 0 16px; }
+            
+            .hero-features { flex-direction: column; gap: 20px; }
+            
+            .calculator-card { padding: 24px; }
+            
+            .total-price .price { font-size: 2.5rem; }
+            
+            .chat-window {
+                width: 280px;
+                right: -20px;
             }
             
-            .hero-features { 
-                flex-direction: column; 
-                gap: 20px; 
+            .footer-links {
+                flex-direction: column;
+                gap: 15px;
             }
             
-            .stats-grid { 
-                grid-template-columns: 1fr; 
-            }
-            
-            .portfolio-grid { 
-                grid-template-columns: 1fr; 
-            }
-            
-            .contact-grid { 
-                padding: 24px; 
-            }
-            
-            .toast { 
-                white-space: normal; 
-                text-align: center; 
+            .quantity-btn {
+                width: 40px;
+                height: 40px;
             }
         }
     </style>
@@ -1006,12 +1695,13 @@
                 <a href="#contact" class="btn btn-primary btn-large">Обсудить проект</a>
             </div>
 
+            <!-- 3D Viewer с реальной моделью -->
             <div class="model-container" id="modelContainer">
                 <canvas id="canvas-3d"></canvas>
                 <div class="loading-spinner" id="loadingSpinner"></div>
                 <div class="file-info" id="fileInfo">
                     <i class="fas fa-cube"></i>
-                    <span id="fileName">tripo_convert_061d8031-f5da-49.stl</span>
+                    <span id="fileName">Пример модели.stl</span>
                 </div>
                 <div class="model-controls">
                     <button class="model-btn" id="zoomInBtn"><i class="fas fa-plus"></i></button>
@@ -1022,13 +1712,155 @@
         </div>
     </section>
 
+    <!-- Калькулятор стоимости с кастомными селектами -->
+    <section class="calculator-section">
+        <div class="container">
+            <h2 class="fade-in">Калькулятор стоимости</h2>
+            <p class="section-subhead fade-in">Рассчитайте примерную стоимость вашего заказа</p>
+            
+            <div class="calculator-card fade-in">
+                <div class="calculator-form">
+                    <!-- Первая строка: Материал и Вес -->
+                    <div class="form-row">
+                        <!-- Материал -->
+                        <div class="input-group">
+                            <span class="input-label">
+                                <i class="fas fa-cube"></i>
+                                Материал
+                            </span>
+                            <div class="custom-select" id="materialSelectContainer">
+                                <div class="select-selected" data-select="material">PLA - 6₽/г (Экологичный)</div>
+                                <div class="select-items" data-select="material">
+                                    <div class="select-item selected" data-value="6">PLA - 6₽/г (Экологичный)</div>
+                                    <div class="select-item" data-value="8">ABS - 8₽/г (Термостойкий)</div>
+                                    <div class="select-item" data-value="9">PETG - 9₽/г (Прозрачный)</div>
+                                    <div class="select-item" data-value="12">TPU - 12₽/г (Эластичный)</div>
+                                    <div class="select-item" data-value="15">PC - 15₽/г (Сверхпрочный)</div>
+                                    <div class="select-item" data-value="18">Nylon - 18₽/г (Износостойкий)</div>
+                                </div>
+                            </div>
+                            <span class="input-hint">
+                                <i class="fas fa-circle-info"></i>
+                                Выберите материал для печати
+                            </span>
+                        </div>
+
+                        <!-- Вес модели -->
+                        <div class="input-group">
+                            <span class="input-label">
+                                <i class="fas fa-weight-hanging"></i>
+                                Вес модели
+                            </span>
+                            <div class="quantity-control">
+                                <button class="quantity-btn" id="weightMinus"><i class="fas fa-minus"></i></button>
+                                <input type="number" id="weightInput" class="quantity-input" value="100" min="1" step="1">
+                                <button class="quantity-btn" id="weightPlus"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <span class="input-hint">
+                                <i class="fas fa-circle-info"></i>
+                                в граммах (г)
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Вторая строка: Количество и Качество -->
+                    <div class="form-row">
+                        <!-- Количество -->
+                        <div class="input-group">
+                            <span class="input-label">
+                                <i class="fas fa-copy"></i>
+                                Количество
+                            </span>
+                            <div class="quantity-control">
+                                <button class="quantity-btn" id="quantityMinus"><i class="fas fa-minus"></i></button>
+                                <input type="number" id="quantityInput" class="quantity-input" value="1" min="1" step="1">
+                                <button class="quantity-btn" id="quantityPlus"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <span class="input-hint">
+                                <i class="fas fa-circle-info"></i>
+                                количество экземпляров (шт)
+                            </span>
+                        </div>
+                        
+                        <!-- Качество -->
+                        <div class="input-group">
+                            <span class="input-label">
+                                <i class="fas fa-star"></i>
+                                Качество
+                            </span>
+                            <div class="custom-select" id="qualitySelectContainer">
+                                <div class="select-selected" data-select="quality">Стандартное качество</div>
+                                <div class="select-items" data-select="quality">
+                                    <div class="select-item selected" data-value="1">Стандартное качество</div>
+                                    <div class="select-item" data-value="1.2">Высокое качество (+20%)</div>
+                                    <div class="select-item" data-value="0.8">Черновое качество (-20%)</div>
+                                </div>
+                            </div>
+                            <span class="input-hint">
+                                <i class="fas fa-circle-info"></i>
+                                влияет на детализацию
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Итоговая стоимость -->
+                    <div class="total-price">
+                        <div class="label">Примерная стоимость</div>
+                        <div>
+                            <span class="price" id="totalPrice">600</span>
+                            <span class="currency">₽</span>
+                        </div>
+                        <div class="hint">
+                            <i class="fas fa-calculator"></i>
+                            Цена × вес × количество × качество
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Преимущества -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="fade-in">Почему выбирают нас</h2>
+            <p class="section-subhead fade-in">8 лет опыта и 500+ довольных клиентов</p>
+            
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon"><i class="fas fa-clock"></i></div>
+                    <h3>Быстро</h3>
+                    <p>От 1 дня на изготовление. Срочные заказы за 6 часов</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon"><i class="fas fa-ruler"></i></div>
+                    <h3>Крупногабарит</h3>
+                    <p>Печатаем детали до 2 метров методом склейки</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon"><i class="fas fa-flask"></i></div>
+                    <h3>30+ материалов</h3>
+                    <p>От PLA до PEEK. Всегда в наличии на складе</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Гарантия</h3>
+                    <p>100% соблюдение сроков. NDA по запросу</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="services" class="services">
         <div class="container">
-            <h2>Услуги</h2>
-            <p class="section-subhead">Полный спектр услуг 3D-печати для бизнеса и производства</p>
+            <h2 class="fade-in">Услуги</h2>
+            <p class="section-subhead fade-in">Полный спектр услуг 3D-печати для бизнеса и производства</p>
             
             <div class="services-grid">
-                <div class="service-card">
+                <div class="service-card fade-in">
                     <div class="service-icon">🏭</div>
                     <h3>Оптовая печать</h3>
                     <ul>
@@ -1038,7 +1870,7 @@
                     </ul>
                 </div>
 
-                <div class="service-card">
+                <div class="service-card fade-in">
                     <div class="service-icon">📏</div>
                     <h3>Крупногабарит</h3>
                     <ul>
@@ -1048,7 +1880,7 @@
                     </ul>
                 </div>
 
-                <div class="service-card">
+                <div class="service-card fade-in">
                     <div class="service-icon">🔬</div>
                     <h3>Прототипирование</h3>
                     <ul>
@@ -1058,7 +1890,7 @@
                     </ul>
                 </div>
 
-                <div class="service-card">
+                <div class="service-card fade-in">
                     <div class="service-icon">⚙️</div>
                     <h3>Промышленные детали</h3>
                     <ul>
@@ -1071,64 +1903,394 @@
         </div>
     </section>
 
+    <!-- Фильтр материалов -->
     <section id="materials" class="materials">
         <div class="container">
-            <h2>Материалы</h2>
-            <p class="section-subhead">Более 30 видов материалов в наличии</p>
+            <h2 class="fade-in">Материалы</h2>
+            <p class="section-subhead fade-in">Более 30 видов материалов в наличии</p>
             
-            <div class="materials-grid">
-                <div class="material-card">
+            <div class="material-filters fade-in">
+                <button class="filter-btn active" data-filter="all">Все</button>
+                <button class="filter-btn" data-filter="eco">Экологичные</button>
+                <button class="filter-btn" data-filter="strong">Прочные</button>
+                <button class="filter-btn" data-filter="flexible">Гибкие</button>
+                <button class="filter-btn" data-filter="transparent">Прозрачные</button>
+            </div>
+            
+            <div class="materials-grid" id="materialsGrid">
+                <div class="material-card" data-category="eco">
                     <div class="material-color" style="background: #22c55e;"></div>
                     <h4>PLA/PLA+</h4>
                     <p>Экологичный</p>
+                    <div class="material-tooltip">
+                        <h5>PLA/PLA+</h5>
+                        <p>Полилактид — биоразлагаемый пластик на основе кукурузы. Идеален для начинающих.</p>
+                        <div class="properties">
+                            <span class="property">t 180-220°C</span>
+                            <span class="property">±0.2% усадка</span>
+                            <span class="property">пищевой</span>
+                        </div>
+                        <p><strong>Применение:</strong> Прототипы, декор, упаковка</p>
+                    </div>
                 </div>
-                <div class="material-card">
+
+                <div class="material-card" data-category="strong">
                     <div class="material-color" style="background: #3b82f6;"></div>
                     <h4>ABS/ASA</h4>
                     <p>Термостойкий</p>
+                    <div class="material-tooltip">
+                        <h5>ABS/ASA</h5>
+                        <p>Акрилонитрилбутадиенстирол — ударопрочный технический пластик.</p>
+                        <div class="properties">
+                            <span class="property">t 220-250°C</span>
+                            <span class="property">ударопрочный</span>
+                            <span class="property">-20°C +80°C</span>
+                        </div>
+                        <p><strong>Применение:</strong> Детали машин, корпуса, автозапчасти</p>
+                    </div>
                 </div>
-                <div class="material-card">
+
+                <div class="material-card" data-category="transparent">
                     <div class="material-color" style="background: #a855f7;"></div>
                     <h4>PETG</h4>
                     <p>Химически стойкий</p>
+                    <div class="material-tooltip">
+                        <h5>PETG</h5>
+                        <p>Полиэтилентерефталат гликоль — прозрачный, химически стойкий пластик.</p>
+                        <div class="properties">
+                            <span class="property">t 220-250°C</span>
+                            <span class="property">прозрачный</span>
+                            <span class="property">пищевой</span>
+                        </div>
+                        <p><strong>Применение:</strong> Емкости, механизмы, вывески</p>
+                    </div>
                 </div>
-                <div class="material-card">
+
+                <div class="material-card" data-category="flexible">
                     <div class="material-color" style="background: #f97316;"></div>
                     <h4>TPU</h4>
                     <p>Эластичный</p>
+                    <div class="material-tooltip">
+                        <h5>TPU</h5>
+                        <p>Термопластичный полиуретан — гибкий, эластичный материал.</p>
+                        <div class="properties">
+                            <span class="property">t 210-230°C</span>
+                            <span class="property">Shore 85-95A</span>
+                            <span class="property">эластичный</span>
+                        </div>
+                        <p><strong>Применение:</strong> Уплотнители, чехлы, амортизаторы</p>
+                    </div>
                 </div>
-                <div class="material-card">
+
+                <div class="material-card" data-category="strong">
                     <div class="material-color" style="background: #6b7280;"></div>
                     <h4>PC</h4>
                     <p>Сверхпрочный</p>
+                    <div class="material-tooltip">
+                        <h5>PC</h5>
+                        <p>Поликарбонат — конструкционный пластик с высокой ударной вязкостью.</p>
+                        <div class="properties">
+                            <span class="property">t 250-280°C</span>
+                            <span class="property">-40°C +120°C</span>
+                            <span class="property">прозрачный</span>
+                        </div>
+                        <p><strong>Применение:</strong> Инженерные детали, оптические элементы</p>
+                    </div>
                 </div>
-                <div class="material-card">
+
+                <div class="material-card" data-category="strong">
                     <div class="material-color" style="background: #1e3a8a;"></div>
                     <h4>PA/Nylon</h4>
                     <p>Износостойкий</p>
+                    <div class="material-tooltip">
+                        <h5>PA/Nylon</h5>
+                        <p>Полиамид — прочный, износостойкий материал с низким трением.</p>
+                        <div class="properties">
+                            <span class="property">t 240-270°C</span>
+                            <span class="property">маслостойкий</span>
+                            <span class="property">износостойкий</span>
+                        </div>
+                        <p><strong>Применение:</strong> Шестерни, подшипники, втулки</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="stats">
+    <!-- Таблица сравнения со стильными звездами -->
+    <section class="comparison-section">
         <div class="container">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="number">15′</div>
-                    <div class="label">расчет</div>
+            <h2 class="fade-in">Сравнение материалов</h2>
+            <p class="section-subhead fade-in">Выберите оптимальный материал для вашей задачи</p>
+            
+            <table class="comparison-table fade-in">
+                <thead>
+                    <tr>
+                        <th>Материал</th>
+                        <th>Температура</th>
+                        <th>Прочность</th>
+                        <th>Гибкость</th>
+                        <th>Прозрачность</th>
+                        <th>Цена</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>PLA</strong></td>
+                        <td>180-220°C</td>
+                        <td>
+                            <div class="star-rating">
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="star-rating">
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="star-rating">
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                            </div>
+                        </td>
+                        <td>6₽/г</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ABS</strong></td>
+                        <td>220-250°C</td>
+                        <td>
+                            <div class="star-rating">
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="star-rating">
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="star-rating">
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                            </div>
+                        </td>
+                        <td>8₽/г</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PETG</strong></td>
+                        <td>220-250°C</td>
+                        <td>
+                            <div class="star-rating">
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="star-rating">
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="star-rating">
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star"></i>
+                            </div>
+                        </td>
+                        <td>9₽/г</td>
+                    </tr>
+                    <tr>
+                        <td><strong>TPU</strong></td>
+                        <td>210-230°C</td>
+                        <td>
+                            <div class="star-rating">
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="star-rating">
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="star-rating">
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                            </div>
+                        </td>
+                        <td>12₽/г</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PC</strong></td>
+                        <td>250-280°C</td>
+                        <td>
+                            <div class="star-rating">
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="star-rating">
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="star-rating">
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star"></i>
+                            </div>
+                        </td>
+                        <td>15₽/г</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Nylon</strong></td>
+                        <td>240-270°C</td>
+                        <td>
+                            <div class="star-rating">
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="star-rating">
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="star-rating">
+                                <i class="fas fa-star star filled"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                                <i class="fas fa-star star"></i>
+                            </div>
+                        </td>
+                        <td>18₽/г</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Отзывы -->
+    <section class="reviews-section">
+        <div class="container">
+            <h2 class="fade-in">Отзывы клиентов</h2>
+            <p class="section-subhead fade-in">Более 500 довольных клиентов по всей России</p>
+            
+            <div class="reviews-grid">
+                <div class="review-card fade-in">
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="review-text">"Отличное качество печати, все в срок! Заказывал корпус для промышленного оборудования. Деталь подошла идеально."</p>
+                    <div class="reviewer">
+                        <div class="reviewer-avatar">ИП</div>
+                        <div class="reviewer-info">
+                            <h4>Иван Петров</h4>
+                            <p>ООО "Технопром"</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="stat-item">
-                    <div class="number">24ч</div>
-                    <div class="label">изготовление</div>
+                
+                <div class="review-card fade-in">
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="review-text">"Заказывали крупногабаритный макет здания 1.5 метра. Сделали быстро, качество сборки отличное. Будем заказывать еще!"</p>
+                    <div class="reviewer">
+                        <div class="reviewer-avatar">АК</div>
+                        <div class="reviewer-info">
+                            <h4>Анна Кузнецова</h4>
+                            <p>Архитектурное бюро</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="stat-item">
-                    <div class="number">30+</div>
-                    <div class="label">материалов</div>
-                </div>
-                <div class="stat-item">
-                    <div class="number">100%</div>
-                    <div class="label">гарантия</div>
+                
+                <div class="review-card fade-in">
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="review-text">"Печатаем у них прототипы для стартапа. Очень довольны соотношением цены и качества. Помогают с выбором материалов."</p>
+                    <div class="reviewer">
+                        <div class="reviewer-avatar">ДМ</div>
+                        <div class="reviewer-info">
+                            <h4>Дмитрий Морозов</h4>
+                            <p>Стартап "RoboTech"</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1136,11 +2298,11 @@
 
     <section id="portfolio" class="portfolio">
         <div class="container">
-            <h2>Работы</h2>
-            <p class="section-subhead">Более 500 успешных проектов</p>
+            <h2 class="fade-in">Работы</h2>
+            <p class="section-subhead fade-in">Более 500 успешных проектов</p>
             
             <div class="portfolio-grid">
-                <div class="portfolio-item">
+                <div class="portfolio-item fade-in">
                     <div class="portfolio-image"><i class="fas fa-cube"></i></div>
                     <div class="portfolio-info">
                         <h4>Корпус оборудования</h4>
@@ -1150,7 +2312,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="portfolio-item">
+                <div class="portfolio-item fade-in">
                     <div class="portfolio-image"><i class="fas fa-city"></i></div>
                     <div class="portfolio-info">
                         <h4>Архитектурный макет</h4>
@@ -1160,7 +2322,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="portfolio-item">
+                <div class="portfolio-item fade-in">
                     <div class="portfolio-image"><i class="fas fa-car"></i></div>
                     <div class="portfolio-info">
                         <h4>Автомобильные прототипы</h4>
@@ -1176,32 +2338,32 @@
 
     <section id="faq" class="faq">
         <div class="container">
-            <h2>FAQ</h2>
-            <p class="section-subhead">Ответы на частые вопросы</p>
+            <h2 class="fade-in">FAQ</h2>
+            <p class="section-subhead fade-in">Ответы на частые вопросы</p>
             
             <div class="faq-grid">
-                <div class="faq-item active">
+                <div class="faq-item active fade-in">
                     <div class="faq-question">
                         Какие форматы принимаете?
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">STL, STEP, IGES, 3MF, OBJ, PDF. Максимальный размер 500 МБ.</div>
                 </div>
-                <div class="faq-item">
+                <div class="faq-item fade-in">
                     <div class="faq-question">
                         Минимальный заказ?
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">2500₽. Для оптовых партий от 6₽/грамм.</div>
                 </div>
-                <div class="faq-item">
+                <div class="faq-item fade-in">
                     <div class="faq-question">
                         Сроки изготовления?
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">От 1 дня. Сложные проекты 2-7 дней.</div>
                 </div>
-                <div class="faq-item">
+                <div class="faq-item fade-in">
                     <div class="faq-question">
                         Работаете с NDA?
                         <i class="fas fa-chevron-down"></i>
@@ -1214,7 +2376,7 @@
 
     <section id="contact" class="contact">
         <div class="container">
-            <div class="contact-grid">
+            <div class="contact-grid fade-in">
                 <div class="contact-info">
                     <h2>Контакты</h2>
                     <p class="section-subhead">Свяжитесь с нами любым способом</p>
@@ -1244,14 +2406,54 @@
         </div>
     </section>
 
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>© 2025 3DPrintService — профессиональная 3D-печать</p>
+            <div class="footer-links">
+                <a href="#services">Услуги</a>
+                <a href="#materials">Материалы</a>
+                <a href="#portfolio">Работы</a>
+                <a href="#faq">FAQ</a>
+                <a href="#contact">Контакты</a>
+            </div>
+            
+            <div class="social-links">
+                <a href="#"><i class="fab fa-telegram"></i></a>
+                <a href="#"><i class="fab fa-whatsapp"></i></a>
+                <a href="#"><i class="fab fa-vk"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+            
+            <p>© 2025 3DPrintService — профессиональная 3D-печать на заказ</p>
         </div>
     </footer>
 
+    <!-- Кнопка наверх -->
+    <button class="scroll-top" id="scrollTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Чат -->
+    <div class="chat-widget">
+        <button class="chat-toggle" id="chatToggle">
+            <i class="fas fa-comment"></i>
+        </button>
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">Чат с поддержкой</div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-message support">Здравствуйте! Чем могу помочь?</div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Напишите сообщение...">
+                <button id="chatSend"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
     <div class="toast" id="toast"></div>
 
+    <!-- Three.js и скрипты -->
     <script type="importmap">
         {
             "imports": {
@@ -1262,6 +2464,7 @@
     </script>
 
     <script type="module">
+        // === 3D Модель ===
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
         import { STLLoader } from 'three/addons/loaders/STLLoader.js';
@@ -1271,6 +2474,7 @@
         const canvas = document.getElementById('canvas-3d');
         const container = document.getElementById('modelContainer');
         const loadingSpinner = document.getElementById('loadingSpinner');
+        const fileInfo = document.getElementById('fileInfo');
         
         if (canvas && container) {
             const scene = new THREE.Scene();
@@ -1294,21 +2498,15 @@
             mainLight.castShadow = true;
             mainLight.shadow.mapSize.width = 1024;
             mainLight.shadow.mapSize.height = 1024;
-            mainLight.shadow.camera.near = 0.5;
-            mainLight.shadow.camera.far = 50;
-            mainLight.shadow.camera.left = -10;
-            mainLight.shadow.camera.right = 10;
-            mainLight.shadow.camera.top = 10;
-            mainLight.shadow.camera.bottom = -10;
             scene.add(mainLight);
             
             const backLight = new THREE.DirectionalLight(0x4466aa, 0.5);
             backLight.position.set(-2, 1, -5);
             scene.add(backLight);
             
-            // Сетка (пол) - ОПУСКАЕМ ВНИЗ
+            // Сетка (пол)
             const gridHelper = new THREE.GridHelper(20, 20, 0x1e3a8a, 0x94a3b8);
-            gridHelper.position.y = 0.32; // Опускаем сетку ниже
+            gridHelper.position.y = -1.5;
             scene.add(gridHelper);
             
             // Контролы
@@ -1318,6 +2516,7 @@
             controls.autoRotate = true;
             controls.autoRotateSpeed = 1.5;
             
+            // Загрузка STL
             const loader = new STLLoader();
             loader.load(
                 STL_URL,
@@ -1327,9 +2526,6 @@
                     const box = geometry.boundingBox;
                     const size = new THREE.Vector3();
                     box.getSize(size);
-                    
-                    console.log('Размер модели:', size);
-                    console.log('Bounding box min:', box.min, 'max:', box.max);
                     
                     const maxDim = Math.max(size.x, size.y, size.z);
                     const scale = 3.5 / maxDim;
@@ -1346,24 +2542,24 @@
                     mesh.scale.set(scale, scale, scale);
                     mesh.rotation.x = -Math.PI / 2;
                     
-                    // Поднимаем модель, чтобы она стояла НАД сеткой
-                    // Находим нижнюю точку модели после поворота и масштабирования
                     const bottomY = box.min.y * scale;
-                    mesh.position.y = -bottomY; // Поднимаем так, чтобы нижняя точка была на Y=0
+                    mesh.position.y = -bottomY;
                     
                     mesh.castShadow = true;
                     mesh.receiveShadow = true;
                     
                     scene.add(mesh);
                     
-                    controls.target.set(0, 1, 0); // Смотрим чуть выше
+                    controls.target.set(0, 1, 0);
                     camera.position.set(size.x * 2, size.y * 1.5, size.z * 2);
                     controls.update();
                     
                     loadingSpinner.style.display = 'none';
+                    fileInfo.style.display = 'flex';
                 },
                 (xhr) => {
-                    console.log(`${Math.floor(xhr.loaded / xhr.total * 100)}%`);
+                    console.log(`Загрузка: ${Math.floor(xhr.loaded / xhr.total * 100)}%`);
+                    loadingSpinner.style.display = 'block';
                 },
                 (error) => {
                     console.error('Ошибка загрузки STL:', error);
@@ -1448,12 +2644,257 @@
             }
         });
 
+        // Кастомные селекты для калькулятора
+        function initCustomSelects() {
+            const selectContainers = document.querySelectorAll('.custom-select');
+            
+            selectContainers.forEach(container => {
+                const selected = container.querySelector('.select-selected');
+                const itemsContainer = container.querySelector('.select-items');
+                const items = container.querySelectorAll('.select-item');
+                
+                // Открытие/закрытие списка
+                selected.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    
+                    // Закрываем все другие списки
+                    document.querySelectorAll('.select-items').forEach(item => {
+                        if (item !== itemsContainer) {
+                            item.classList.remove('active');
+                        }
+                    });
+                    document.querySelectorAll('.select-selected').forEach(sel => {
+                        if (sel !== selected) {
+                            sel.classList.remove('active');
+                        }
+                    });
+                    
+                    // Открываем текущий
+                    itemsContainer.classList.toggle('active');
+                    selected.classList.toggle('active');
+                });
+                
+                // Выбор элемента
+                items.forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        
+                        // Убираем выделение у всех
+                        items.forEach(i => i.classList.remove('selected'));
+                        
+                        // Выделяем текущий
+                        item.classList.add('selected');
+                        
+                        // Меняем текст в выбранном
+                        selected.textContent = item.textContent;
+                        
+                        // Закрываем список
+                        itemsContainer.classList.remove('active');
+                        selected.classList.remove('active');
+                        
+                        // Обновляем калькулятор
+                        calculatePrice();
+                    });
+                });
+            });
+            
+            // Закрытие при клике вне
+            document.addEventListener('click', () => {
+                document.querySelectorAll('.select-items').forEach(item => {
+                    item.classList.remove('active');
+                });
+                document.querySelectorAll('.select-selected').forEach(sel => {
+                    sel.classList.remove('active');
+                });
+            });
+        }
+
+        // Калькулятор
+        const weightInput = document.getElementById('weightInput');
+        const quantityInput = document.getElementById('quantityInput');
+        const totalPriceSpan = document.getElementById('totalPrice');
+        
+        const weightMinus = document.getElementById('weightMinus');
+        const weightPlus = document.getElementById('weightPlus');
+        const quantityMinus = document.getElementById('quantityMinus');
+        const quantityPlus = document.getElementById('quantityPlus');
+
+        function calculatePrice() {
+            // Получаем материал
+            const materialItem = document.querySelector('#materialSelectContainer .select-item.selected');
+            const pricePerGram = materialItem ? parseFloat(materialItem.dataset.value) : 6;
+            
+            // Получаем качество
+            const qualityItem = document.querySelector('#qualitySelectContainer .select-item.selected');
+            const quality = qualityItem ? parseFloat(qualityItem.dataset.value) : 1;
+            
+            const weight = parseFloat(weightInput.value) || 0;
+            const quantity = parseFloat(quantityInput.value) || 1;
+            
+            const total = pricePerGram * weight * quantity * quality;
+            totalPriceSpan.textContent = Math.round(total);
+        }
+
+        // Инициализация кастомных селектов
+        initCustomSelects();
+
+        weightInput.addEventListener('input', calculatePrice);
+        quantityInput.addEventListener('input', calculatePrice);
+        
+        weightMinus.addEventListener('click', () => {
+            let val = parseInt(weightInput.value) || 1;
+            if (val > 1) {
+                weightInput.value = val - 1;
+                calculatePrice();
+            }
+        });
+        
+        weightPlus.addEventListener('click', () => {
+            let val = parseInt(weightInput.value) || 1;
+            weightInput.value = val + 1;
+            calculatePrice();
+        });
+        
+        quantityMinus.addEventListener('click', () => {
+            let val = parseInt(quantityInput.value) || 1;
+            if (val > 1) {
+                quantityInput.value = val - 1;
+                calculatePrice();
+            }
+        });
+        
+        quantityPlus.addEventListener('click', () => {
+            let val = parseInt(quantityInput.value) || 1;
+            quantityInput.value = val + 1;
+            calculatePrice();
+        });
+        
+        calculatePrice();
+
+        // Фильтр материалов
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const materialCards = document.querySelectorAll('.material-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const filter = btn.dataset.filter;
+                
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                materialCards.forEach(card => {
+                    if (filter === 'all' || card.dataset.category === filter) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Подсказки для материалов на мобильных
+        materialCards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (window.matchMedia('(hover: none)').matches) {
+                    e.preventDefault();
+                    
+                    materialCards.forEach(c => {
+                        if (c !== card) {
+                            c.classList.remove('active');
+                        }
+                    });
+                    
+                    card.classList.toggle('active');
+                }
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (window.matchMedia('(hover: none)').matches) {
+                if (!e.target.closest('.material-card')) {
+                    materialCards.forEach(card => {
+                        card.classList.remove('active');
+                    });
+                }
+            }
+        });
+
         // FAQ
         document.querySelectorAll('.faq-question').forEach(q => {
             q.addEventListener('click', () => {
                 const item = q.closest('.faq-item');
                 item.classList.toggle('active');
             });
+        });
+
+        // Анимация появления
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        function checkFade() {
+            fadeElements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+                
+                if (rect.top < windowHeight - 100) {
+                    el.classList.add('visible');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', checkFade);
+        window.addEventListener('load', checkFade);
+
+        // Кнопка наверх
+        const scrollTop = document.getElementById('scrollTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                scrollTop.classList.add('visible');
+            } else {
+                scrollTop.classList.remove('visible');
+            }
+        });
+        
+        scrollTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Чат
+        const chatToggle = document.getElementById('chatToggle');
+        const chatWindow = document.getElementById('chatWindow');
+        const chatInput = document.getElementById('chatInput');
+        const chatSend = document.getElementById('chatSend');
+        const chatMessages = document.getElementById('chatMessages');
+
+        chatToggle.addEventListener('click', () => {
+            chatWindow.classList.toggle('active');
+        });
+
+        function sendMessage() {
+            const text = chatInput.value.trim();
+            if (text) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'chat-message user';
+                messageDiv.textContent = text;
+                chatMessages.appendChild(messageDiv);
+                chatInput.value = '';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                setTimeout(() => {
+                    const replyDiv = document.createElement('div');
+                    replyDiv.className = 'chat-message support';
+                    replyDiv.textContent = 'Спасибо за сообщение! Мы ответим в ближайшее время.';
+                    chatMessages.appendChild(replyDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1000);
+            }
+        }
+
+        chatSend.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
         });
 
         // Toast
@@ -1473,19 +2914,6 @@
                     target.scrollIntoView({ behavior: 'smooth' });
                 }
             });
-        });
-
-        // Управление 3D (заглушки)
-        document.getElementById('zoomInBtn')?.addEventListener('click', () => {
-            // Здесь будет логика зума
-        });
-        
-        document.getElementById('zoomOutBtn')?.addEventListener('click', () => {
-            // Здесь будет логика зума
-        });
-        
-        document.getElementById('resetViewBtn')?.addEventListener('click', () => {
-            // Здесь будет сброс вида
         });
     </script>
 </body>
