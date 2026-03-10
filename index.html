@@ -136,7 +136,7 @@
                 background-position: 0 0;
             }
             100% {
-                background-position: 100px 100px;
+                background-position: 200px 200px;
             }
         }
 
@@ -145,7 +145,7 @@
                 background-position: 0 0;
             }
             100% {
-                background-position: -100px -100px;
+                background-position: -200px -200px;
             }
         }
 
@@ -174,7 +174,7 @@
             background-size: 42px 42px;
             pointer-events: none;
             z-index: 1;
-            animation: flowStripes 8s linear infinite;
+            animation: flowStripes 3s linear infinite;
         }
 
         .calculator-section::after {
@@ -218,7 +218,7 @@
             background-size: 42px 42px;
             pointer-events: none;
             z-index: 1;
-            animation: flowStripesReverse 5s linear infinite;
+            animation: flowStripesReverse 2s linear infinite;
         }
 
         .materials-section::after {
@@ -276,7 +276,7 @@
             background-size: 42px 42px;
             pointer-events: none;
             z-index: 1;
-            animation: flowStripes 6s linear infinite;
+            animation: flowStripes 2.5s linear infinite;
         }
 
         .reviews-portfolio-wrapper::after {
@@ -1811,16 +1811,12 @@
             justify-content: center;
             gap: 30px;
             margin: 20px 0;
-            position: relative;
-            z-index: 1;
         }
 
         .footer-links a {
             color: var(--text-secondary);
             text-decoration: none;
             transition: color 0.2s;
-            position: relative;
-            z-index: 1;
         }
 
         .footer-links a:hover {
@@ -1832,8 +1828,6 @@
             justify-content: center;
             gap: 15px;
             margin: 30px 0 20px;
-            position: relative;
-            z-index: 1;
         }
 
         .social-links a {
@@ -1846,8 +1840,6 @@
             justify-content: center;
             color: var(--text-secondary);
             transition: all 0.2s;
-            position: relative;
-            z-index: 1;
         }
 
         .social-links a:hover {
@@ -1919,25 +1911,46 @@
                 z-index: 99;
             }
 
-            .nav-links.active { right: 0; }
+            .nav-links.active { 
+                right: 0; 
+            }
 
-            .nav-links a { font-size: 1.1rem; }
+            .nav-links a { 
+                font-size: 1.1rem; 
+            }
 
-            .theme-switch { margin-top: 20px; }
+            .theme-switch { 
+                margin-top: 20px; 
+            }
 
-            .hero-grid { grid-template-columns: 1fr; }
+            .hero-grid { 
+                grid-template-columns: 1fr; 
+            }
             
-            .hero-features { justify-content: space-around; }
+            .hero-features { 
+                justify-content: space-around; 
+            }
             
-            .features-grid { grid-template-columns: 1fr; }
+            .features-grid { 
+                grid-template-columns: 1fr; 
+            }
             
-            .reviews-section .reviews-grid { grid-template-columns: 1fr; }
+            .reviews-section .reviews-grid { 
+                grid-template-columns: 1fr; 
+            }
             
-            .form-row { grid-template-columns: 1fr; }
+            .form-row { 
+                grid-template-columns: 1fr; 
+            }
             
-            .faq-grid { grid-template-columns: 1fr; }
+            .faq-grid { 
+                grid-template-columns: 1fr; 
+            }
             
-            .contact-grid { grid-template-columns: 1fr; padding: 40px; }
+            .contact-grid { 
+                grid-template-columns: 1fr; 
+                padding: 40px; 
+            }
             
             .comparison-table {
                 font-size: 0.85rem;
@@ -1966,11 +1979,18 @@
         @media (max-width: 480px) {
             .container { padding: 0 16px; }
             
-            .hero-features { flex-direction: column; gap: 20px; }
+            .hero-features { 
+                flex-direction: column; 
+                gap: 20px; 
+            }
             
-            .calculator-card { padding: 24px; }
+            .calculator-card { 
+                padding: 24px; 
+            }
             
-            .total-price .price { font-size: 2.5rem; }
+            .total-price .price { 
+                font-size: 2.5rem; 
+            }
             
             .chat-window {
                 width: 280px;
@@ -2826,15 +2846,18 @@
         const container = document.getElementById('modelContainer');
         const loadingSpinner = document.getElementById('loadingSpinner');
         const fileInfo = document.getElementById('fileInfo');
-        
+
+        // Объявляем переменные глобально для доступа из кнопок
+        let scene, camera, renderer, controls;
+
         if (canvas && container) {
-            const scene = new THREE.Scene();
+            scene = new THREE.Scene();
             scene.background = new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue('--bg-tertiary').trim());
             
-            const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
             camera.position.set(8, 6, 15);
             
-            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
             renderer.setSize(container.clientWidth, container.clientHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.shadowMap.enabled = true;
@@ -2858,7 +2881,7 @@
             gridHelper.position.y = 0.32;
             scene.add(gridHelper);
             
-            const controls = new OrbitControls(camera, renderer.domElement);
+            controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
             controls.autoRotate = true;
