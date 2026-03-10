@@ -63,6 +63,62 @@
             --tooltip-text: #f8fafc;
             --star-empty: #334155;
         }
+        
+                /* ===== Анимация смены темы ===== */
+        .theme-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: 9999;
+            pointer-events: none;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0.3s, opacity 0.3s;
+        }
+
+        .theme-transition.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .theme-transition::before {
+            content: '';
+            position: absolute;
+            top: var(--y, 50%);
+            left: var(--x, 50%);
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(200, 220, 255, 0.5) 40%, transparent 70%);
+            transform: translate(-50%, -50%);
+            animation: wave 0.8s ease-out forwards;
+            pointer-events: none;
+            box-shadow: 0 0 100px rgba(30, 58, 138, 0.5);
+        }
+
+        [data-theme="dark"] .theme-transition::before {
+            background: radial-gradient(circle, rgba(20, 30, 50, 0.9) 0%, rgba(40, 60, 100, 0.6) 40%, transparent 70%);
+            box-shadow: 0 0 100px rgba(59, 130, 246, 0.5);
+        }
+
+        @keyframes wave {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                width: 300vw;
+                height: 300vh;
+                opacity: 0;
+            }
+        }
 
         /* ===== Фоновые элементы ===== */
         body {
@@ -218,7 +274,7 @@
             background-size: 42px 42px;
             pointer-events: none;
             z-index: 1;
-            animation: flowStripesReverse 2s linear infinite;
+            animation: flowStripesReverse 45s linear infinite;
         }
 
         .materials-section::after {
@@ -2016,6 +2072,7 @@
     </style>
 </head>
 <body>
+    <div class="theme-transition" id="themeTransition"></div>
     <div class="gradient-overlay"></div>
     <div class="menu-overlay" id="menuOverlay"></div>
 
@@ -2885,7 +2942,7 @@
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
             controls.autoRotate = true;
-            controls.autoRotateSpeed = 1.5;
+            controls.autoRotateSpeed = 0.3;
             controls.maxDistance = 20;
             controls.minDistance = 5;
             
@@ -2956,25 +3013,53 @@
         // Переключение тем
         const lightThemeBtn = document.getElementById('lightTheme');
         const darkThemeBtn = document.getElementById('darkTheme');
-        
-        function setTheme(theme) {
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
+        const themeTransition = document.getElementById('themeTransition');
+
+        function setThemeWithAnimation(theme) {
+            // Получаем координаты клика
+            const x = event ? event.clientX : window.innerWidth / 2;
+            const y = event ? event.clientY : window.innerHeight / 2;
             
-            if (theme === 'dark') {
-                lightThemeBtn.classList.remove('active');
-                darkThemeBtn.classList.add('active');
-            } else {
-                darkThemeBtn.classList.remove('active');
-                lightThemeBtn.classList.add('active');
-            }
+            // Устанавливаем позицию волны
+            themeTransition.style.setProperty('--x', x + 'px');
+            themeTransition.style.setProperty('--y', y + 'px');
+            
+            // Запускаем анимацию
+            themeTransition.classList.add('active');
+            
+            // Меняем тему после небольшой задержки
+            setTimeout(() => {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                
+                if (theme === 'dark') {
+                    lightThemeBtn.classList.remove('active');
+                    darkThemeBtn.classList.add('active');
+                } else {
+                    darkThemeBtn.classList.remove('active');
+                    lightThemeBtn.classList.add('active');
+                }
+                
+                // Убираем анимацию
+                setTimeout(() => {
+                    themeTransition.classList.remove('active');
+                }, 300);
+            }, 150);
         }
-        
-        lightThemeBtn.addEventListener('click', () => setTheme('light'));
-        darkThemeBtn.addEventListener('click', () => setTheme('dark'));
-        
+
+        lightThemeBtn.addEventListener('click', (e) => setThemeWithAnimation('light', e));
+        darkThemeBtn.addEventListener('click', (e) => setThemeWithAnimation('dark', e));
+
+        // Загружаем сохраненную тему без анимации при загрузке страницы
         const savedTheme = localStorage.getItem('theme') || 'light';
-        setTheme(savedTheme);
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        if (savedTheme === 'dark') {
+            lightThemeBtn.classList.remove('active');
+            darkThemeBtn.classList.add('active');
+        } else {
+            darkThemeBtn.classList.remove('active');
+            lightThemeBtn.classList.add('active');
+        }
 
         // Мобильное меню
         const burger = document.getElementById('burger');
@@ -3299,7 +3384,7 @@
         if (resetViewBtn) {
             resetViewBtn.addEventListener('click', () => {
                 if (camera && controls) {
-                    camera.position.set(8, 6, 15);
+                    camera.position.set(1, 2, 1);
                     controls.target.set(0, 1, 0);
                     controls.update();
                 }
