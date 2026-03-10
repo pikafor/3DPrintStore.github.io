@@ -11,7 +11,6 @@
     <style>
         /* ===== CSS переменные для тем ===== */
         :root {
-            /* Светлая тема (по умолчанию) */
             --bg-primary: #ffffff;
             --bg-secondary: #f8fafc;
             --bg-tertiary: #f1f5f9;
@@ -68,7 +67,6 @@
             background-color: var(--bg-primary);
         }
 
-        /* Основной геометрический фон */
         body::before {
             content: '';
             position: fixed;
@@ -84,7 +82,6 @@
             z-index: 0;
         }
 
-        /* Точки на пересечениях */
         body::after {
             content: '';
             position: fixed;
@@ -98,7 +95,6 @@
             z-index: 0;
         }
 
-        /* Градиентное затемнение по краям */
         .gradient-overlay {
             position: fixed;
             top: 0;
@@ -111,20 +107,17 @@
             opacity: 0.8;
         }
 
-        /* Все контенты выше фона */
         .navbar, .hero, .services, .materials, .stats, .portfolio, .faq, .contact, .footer {
             position: relative;
             z-index: 2;
             background: transparent;
         }
 
-        /* Карточки и блоки с полупрозрачным фоном */
         .service-card, .material-card, .portfolio-item, .faq-item, .contact-grid {
             backdrop-filter: blur(10px);
             background: rgba(var(--bg-primary), 0.8);
         }
 
-        /* ===== Базовые стили ===== */
         * {
             margin: 0;
             padding: 0;
@@ -150,7 +143,6 @@
             z-index: 3;
         }
 
-        /* ===== Типографика ===== */
         h1, h2, h3, h4 {
             font-weight: 600;
             letter-spacing: -0.02em;
@@ -179,7 +171,6 @@
             margin-bottom: 3rem;
         }
 
-        /* ===== Кнопки ===== */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -226,7 +217,6 @@
             font-size: 1.125rem;
         }
 
-        /* ===== Навигация ===== */
         .navbar {
             padding: 20px 0;
             position: sticky;
@@ -272,7 +262,6 @@
             color: var(--accent-primary);
         }
 
-        /* ===== Переключатель темы ===== */
         .theme-switch {
             display: flex;
             align-items: center;
@@ -303,7 +292,6 @@
             box-shadow: var(--shadow-sm);
         }
 
-        /* Бургер-меню (превращается в крестик) */
         .burger {
             display: none;
             width: 30px;
@@ -348,7 +336,6 @@
             top: 14px;
         }
 
-        /* Оверлей для мобильного меню */
         .menu-overlay {
             display: none;
             position: fixed;
@@ -369,7 +356,6 @@
             pointer-events: auto;
         }
 
-        /* ===== Hero секция ===== */
         .hero {
             padding: 60px 0 80px;
             position: relative;
@@ -440,7 +426,6 @@
             margin-right: 4px;
         }
 
-        /* ===== 3D Viewer ===== */
         .model-container {
             width: 100%;
             height: min(500px, 60vw);
@@ -528,7 +513,6 @@
             to { transform: translate(-50%, -50%) rotate(360deg); }
         }
 
-        /* ===== Карточки услуг ===== */
         .services {
             padding: 100px 0;
             position: relative;
@@ -588,7 +572,6 @@
             font-size: 0.8rem;
         }
 
-        /* ===== Материалы ===== */
         .materials {
             padding: 100px 0;
             position: relative;
@@ -636,7 +619,6 @@
             color: var(--text-tertiary);
         }
 
-        /* ===== Статистика ===== */
         .stats {
             padding: 80px 0;
             position: relative;
@@ -665,7 +647,6 @@
             letter-spacing: 0.05em;
         }
 
-        /* ===== Портфолио ===== */
         .portfolio {
             padding: 100px 0;
             position: relative;
@@ -722,7 +703,6 @@
             font-size: 0.9rem;
         }
 
-        /* ===== FAQ ===== */
         .faq {
             padding: 100px 0;
             position: relative;
@@ -779,7 +759,6 @@
             display: block;
         }
 
-        /* ===== Контакты ===== */
         .contact {
             padding: 100px 0;
             position: relative;
@@ -838,7 +817,6 @@
             color: var(--text-tertiary);
         }
 
-        /* ===== Footer ===== */
         .footer {
             padding: 40px 0;
             text-align: center;
@@ -851,7 +829,6 @@
             background: rgba(var(--bg-primary), 0.5);
         }
 
-        /* ===== Toast ===== */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -874,7 +851,6 @@
             opacity: 1;
         }
 
-        /* ===== Адаптивность ===== */
         @media (max-width: 1024px) {
             .container { padding: 0 24px; }
             .hero-grid { gap: 40px; }
@@ -967,13 +943,9 @@
     </style>
 </head>
 <body>
-    <!-- Градиентное затемнение поверх фона -->
     <div class="gradient-overlay"></div>
-
-    <!-- Оверлей для мобильного меню -->
     <div class="menu-overlay" id="menuOverlay"></div>
 
-    <!-- Navigation -->
     <nav class="navbar">
         <div class="container nav-container">
             <span class="logo">3DPS</span>
@@ -985,14 +957,12 @@
                 <a href="#faq">FAQ</a>
                 <a href="#contact">Контакты</a>
                 
-                <!-- Theme switch -->
                 <div class="theme-switch">
                     <button class="theme-btn active" id="lightTheme"><i class="fas fa-sun"></i></button>
                     <button class="theme-btn" id="darkTheme"><i class="fas fa-moon"></i></button>
                 </div>
             </div>
 
-            <!-- Бургер, который превращается в крестик -->
             <div class="burger" id="burger">
                 <span></span>
                 <span></span>
@@ -1001,7 +971,6 @@
         </div>
     </nav>
 
-    <!-- Hero -->
     <section class="hero">
         <div class="container hero-grid">
             <div>
@@ -1037,7 +1006,6 @@
                 <a href="#contact" class="btn btn-primary btn-large">Обсудить проект</a>
             </div>
 
-            <!-- 3D Viewer -->
             <div class="model-container" id="modelContainer">
                 <canvas id="canvas-3d"></canvas>
                 <div class="loading-spinner" id="loadingSpinner"></div>
@@ -1054,7 +1022,6 @@
         </div>
     </section>
 
-    <!-- Services -->
     <section id="services" class="services">
         <div class="container">
             <h2>Услуги</h2>
@@ -1104,7 +1071,6 @@
         </div>
     </section>
 
-    <!-- Materials -->
     <section id="materials" class="materials">
         <div class="container">
             <h2>Материалы</h2>
@@ -1145,7 +1111,6 @@
         </div>
     </section>
 
-    <!-- Stats -->
     <section class="stats">
         <div class="container">
             <div class="stats-grid">
@@ -1169,7 +1134,6 @@
         </div>
     </section>
 
-    <!-- Portfolio -->
     <section id="portfolio" class="portfolio">
         <div class="container">
             <h2>Работы</h2>
@@ -1210,7 +1174,6 @@
         </div>
     </section>
 
-    <!-- FAQ -->
     <section id="faq" class="faq">
         <div class="container">
             <h2>FAQ</h2>
@@ -1249,7 +1212,6 @@
         </div>
     </section>
 
-    <!-- Contact -->
     <section id="contact" class="contact">
         <div class="container">
             <div class="contact-grid">
@@ -1282,17 +1244,14 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <p>© 2025 3DPrintService — профессиональная 3D-печать</p>
         </div>
     </footer>
 
-    <!-- Toast -->
     <div class="toast" id="toast"></div>
 
-    <!-- Three.js и скрипты -->
     <script type="importmap">
         {
             "imports": {
@@ -1303,15 +1262,12 @@
     </script>
 
     <script type="module">
-        // === 3D Модель ===
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
         import { STLLoader } from 'three/addons/loaders/STLLoader.js';
 
-        // Путь к STL
         const STL_URL = './tripo_convert_061d8031-f5da-49.stl';
 
-        // Инициализация сцены
         const canvas = document.getElementById('canvas-3d');
         const container = document.getElementById('modelContainer');
         const loadingSpinner = document.getElementById('loadingSpinner');
@@ -1326,27 +1282,42 @@
             const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
             renderer.setSize(container.clientWidth, container.clientHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             
             // Освещение
             const ambientLight = new THREE.AmbientLight(0x404060);
             scene.add(ambientLight);
             
             const mainLight = new THREE.DirectionalLight(0xffffff, 1);
-            mainLight.position.set(2, 5, 5);
+            mainLight.position.set(5, 10, 7);
+            mainLight.castShadow = true;
+            mainLight.shadow.mapSize.width = 1024;
+            mainLight.shadow.mapSize.height = 1024;
+            mainLight.shadow.camera.near = 0.5;
+            mainLight.shadow.camera.far = 50;
+            mainLight.shadow.camera.left = -10;
+            mainLight.shadow.camera.right = 10;
+            mainLight.shadow.camera.top = 10;
+            mainLight.shadow.camera.bottom = -10;
             scene.add(mainLight);
             
-            // Сетка
+            const backLight = new THREE.DirectionalLight(0x4466aa, 0.5);
+            backLight.position.set(-2, 1, -5);
+            scene.add(backLight);
+            
+            // Сетка (пол) - ОПУСКАЕМ ВНИЗ
             const gridHelper = new THREE.GridHelper(20, 20, 0x1e3a8a, 0x94a3b8);
-            gridHelper.position.y = -0.5;
+            gridHelper.position.y = 0.32; // Опускаем сетку ниже
             scene.add(gridHelper);
             
             // Контролы
             const controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
             controls.autoRotate = true;
             controls.autoRotateSpeed = 1.5;
             
-            // Загрузка STL
             const loader = new STLLoader();
             loader.load(
                 STL_URL,
@@ -1357,6 +1328,9 @@
                     const size = new THREE.Vector3();
                     box.getSize(size);
                     
+                    console.log('Размер модели:', size);
+                    console.log('Bounding box min:', box.min, 'max:', box.max);
+                    
                     const maxDim = Math.max(size.x, size.y, size.z);
                     const scale = 3.5 / maxDim;
                     
@@ -1364,17 +1338,27 @@
                         color: 0x3a6ea5,
                         roughness: 0.3,
                         metalness: 0.2,
-                        side: THREE.DoubleSide
+                        side: THREE.DoubleSide,
+                        emissive: 0x000000
                     });
                     
                     const mesh = new THREE.Mesh(geometry, material);
                     mesh.scale.set(scale, scale, scale);
-                    mesh.rotation.x = -Math.PI / 2; // Коррекция ориентации
+                    mesh.rotation.x = -Math.PI / 2;
+                    
+                    // Поднимаем модель, чтобы она стояла НАД сеткой
+                    // Находим нижнюю точку модели после поворота и масштабирования
+                    const bottomY = box.min.y * scale;
+                    mesh.position.y = -bottomY; // Поднимаем так, чтобы нижняя точка была на Y=0
+                    
+                    mesh.castShadow = true;
+                    mesh.receiveShadow = true;
                     
                     scene.add(mesh);
                     
-                    controls.target.set(0, 0, 0);
-                    camera.position.set(size.x * 2, size.y * 2, size.z * 2);
+                    controls.target.set(0, 1, 0); // Смотрим чуть выше
+                    camera.position.set(size.x * 2, size.y * 1.5, size.z * 2);
+                    controls.update();
                     
                     loadingSpinner.style.display = 'none';
                 },
@@ -1387,7 +1371,6 @@
                 }
             );
             
-            // Анимация
             function animate() {
                 requestAnimationFrame(animate);
                 controls.update();
@@ -1395,7 +1378,6 @@
             }
             animate();
             
-            // Resize
             window.addEventListener('resize', () => {
                 camera.aspect = container.clientWidth / container.clientHeight;
                 camera.updateProjectionMatrix();
@@ -1403,7 +1385,7 @@
             });
         }
 
-        // === Переключение тем ===
+        // Переключение тем
         const lightThemeBtn = document.getElementById('lightTheme');
         const darkThemeBtn = document.getElementById('darkTheme');
         
@@ -1423,11 +1405,10 @@
         lightThemeBtn.addEventListener('click', () => setTheme('light'));
         darkThemeBtn.addEventListener('click', () => setTheme('dark'));
         
-        // Загружаем сохраненную тему
         const savedTheme = localStorage.getItem('theme') || 'light';
         setTheme(savedTheme);
 
-        // === Мобильное меню (только бургер) ===
+        // Мобильное меню
         const burger = document.getElementById('burger');
         const navLinks = document.getElementById('navLinks');
         const menuOverlay = document.getElementById('menuOverlay');
@@ -1436,14 +1417,14 @@
             burger.classList.add('active');
             navLinks.classList.add('active');
             menuOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden'; // Блокируем прокрутку
+            document.body.style.overflow = 'hidden';
         }
         
         function closeMenu() {
             burger.classList.remove('active');
             navLinks.classList.remove('active');
             menuOverlay.classList.remove('active');
-            document.body.style.overflow = ''; // Восстанавливаем прокрутку
+            document.body.style.overflow = '';
         }
         
         burger.addEventListener('click', (e) => {
@@ -1457,19 +1438,17 @@
         
         menuOverlay.addEventListener('click', closeMenu);
         
-        // Закрытие по клику на ссылку
         navLinks.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', closeMenu);
         });
 
-        // Закрытие по ESC
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && navLinks.classList.contains('active')) {
                 closeMenu();
             }
         });
 
-        // === FAQ ===
+        // FAQ
         document.querySelectorAll('.faq-question').forEach(q => {
             q.addEventListener('click', () => {
                 const item = q.closest('.faq-item');
@@ -1477,7 +1456,7 @@
             });
         });
 
-        // === Toast ===
+        // Toast
         window.showToast = function(text) {
             const toast = document.getElementById('toast');
             toast.textContent = text;
@@ -1485,7 +1464,7 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         };
 
-        // === Плавный скролл ===
+        // Плавный скролл
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -1494,6 +1473,19 @@
                     target.scrollIntoView({ behavior: 'smooth' });
                 }
             });
+        });
+
+        // Управление 3D (заглушки)
+        document.getElementById('zoomInBtn')?.addEventListener('click', () => {
+            // Здесь будет логика зума
+        });
+        
+        document.getElementById('zoomOutBtn')?.addEventListener('click', () => {
+            // Здесь будет логика зума
+        });
+        
+        document.getElementById('resetViewBtn')?.addEventListener('click', () => {
+            // Здесь будет сброс вида
         });
     </script>
 </body>
