@@ -2550,8 +2550,13 @@
                     
                     scene.add(mesh);
                     
+                    // НАСТРОЙКА КАМЕРЫ - ОТДАЛЯЕМ
                     controls.target.set(0, 1, 0);
-                    camera.position.set(size.x * 2, size.y * 1.5, size.z * 2);
+                    
+                    // Увеличиваем множители для более дальней камеры
+                    // Было size.x * 2, size.y * 1.5, size.z * 2
+                    // Стало size.x * 3.5, size.y * 2.5, size.z * 3.5
+                    camera.position.set(size.x * 5, size.y * 4, size.z * 5);
                     controls.update();
                     
                     loadingSpinner.style.display = 'none';
@@ -2573,6 +2578,39 @@
                 renderer.render(scene, camera);
             }
             animate();
+            // ===== УПРАВЛЕНИЕ 3D КНОПКАМИ =====
+            const zoomInBtn = document.getElementById('zoomInBtn');
+            const zoomOutBtn = document.getElementById('zoomOutBtn');
+            const resetViewBtn = document.getElementById('resetViewBtn');
+
+            if (zoomInBtn) {
+                zoomInBtn.addEventListener('click', () => {
+                    if (controls) {
+                        camera.position.multiplyScalar(0.8);
+                        controls.update();
+                    }
+                });
+            }
+
+            if (zoomOutBtn) {
+                zoomOutBtn.addEventListener('click', () => {
+                    if (controls) {
+                        camera.position.multiplyScalar(1.2);
+                        controls.update();
+                    }
+                });
+            }
+
+            if (resetViewBtn) {
+                resetViewBtn.addEventListener('click', () => {
+                    if (controls) {
+                        camera.position.set(8, 6, 15);
+                        controls.target.set(0, 1, 0);
+                        controls.update();
+                    }
+                });
+            }
+            // ===== КОНЕЦ УПРАВЛЕНИЯ =====
             
             window.addEventListener('resize', () => {
                 camera.aspect = container.clientWidth / container.clientHeight;
