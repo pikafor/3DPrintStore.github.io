@@ -77,7 +77,6 @@
             right: 0;
             bottom: 0;
             background-image: 
-                /* Линии сетки */
                 linear-gradient(var(--grid-color) 1px, transparent 1px),
                 linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
             background-size: 50px 50px;
@@ -110,19 +109,6 @@
             pointer-events: none;
             z-index: 1;
             opacity: 0.8;
-        }
-
-        /* Все контенты выше фона */
-        .navbar, .hero, .services, .materials, .stats, .portfolio, .faq, .contact, .footer {
-            position: relative;
-            z-index: 2;
-            background: transparent;
-        }
-
-        /* Карточки и блоки с полупрозрачным фоном */
-        .service-card, .material-card, .portfolio-item, .faq-item, .contact-grid {
-            backdrop-filter: blur(10px);
-            background: rgba(var(--bg-primary), 0.8);
         }
 
         /* ===== Базовые стили ===== */
@@ -309,6 +295,7 @@
             flex-direction: column;
             gap: 6px;
             cursor: pointer;
+            z-index: 102;
         }
 
         .burger span {
@@ -316,6 +303,64 @@
             height: 2px;
             background: var(--text-primary);
             transition: all 0.3s;
+        }
+
+        .burger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .burger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(8px, -8px);
+        }
+
+        /* Кнопка закрытия для мобильного меню */
+        .menu-close {
+            display: none;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 40px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-light);
+            color: var(--text-secondary);
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 103;
+            font-size: 1.2rem;
+            transition: all 0.2s;
+        }
+
+        .menu-close:hover {
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        /* Оверлей (затемнение фона при открытом меню) */
+        .menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
+            z-index: 98;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
         }
 
         /* ===== Hero секция ===== */
@@ -832,24 +877,30 @@
         @media (max-width: 768px) {
             .burger { display: flex; }
             
+            .menu-close {
+                display: flex;
+            }
+
             .nav-links {
                 position: fixed;
                 top: 0;
                 right: -100%;
-                width: 300px;
+                width: 280px;
                 height: 100vh;
                 background: var(--bg-primary);
                 flex-direction: column;
                 justify-content: center;
                 gap: 32px;
-                padding: 40px;
+                padding: 60px 40px;
                 box-shadow: var(--shadow-lg);
-                transition: right 0.3s;
+                transition: right 0.3s ease;
                 border-left: 1px solid var(--border-light);
                 z-index: 99;
             }
 
-            .nav-links.active { right: 0; }
+            .nav-links.active { 
+                right: 0; 
+            }
 
             .hero-grid { grid-template-columns: 1fr; }
             .hero-features { justify-content: space-around; }
@@ -873,12 +924,20 @@
     <!-- Градиентное затемнение поверх фона -->
     <div class="gradient-overlay"></div>
 
+    <!-- Оверлей для мобильного меню -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
     <!-- Navigation -->
     <nav class="navbar">
         <div class="container nav-container">
             <span class="logo">3DPS</span>
             
             <div class="nav-links" id="navLinks">
+                <!-- Кнопка закрытия для мобильной версии -->
+                <div class="menu-close" id="menuClose">
+                    <i class="fas fa-times"></i>
+                </div>
+                
                 <a href="#services">Услуги</a>
                 <a href="#materials">Материалы</a>
                 <a href="#portfolio">Работы</a>
@@ -1329,17 +1388,30 @@
         // === Мобильное меню ===
         const burger = document.getElementById('burger');
         const navLinks = document.getElementById('navLinks');
+        const menuClose = document.getElementById('menuClose');
+        const menuOverlay = document.getElementById('menuOverlay');
         
-        burger.addEventListener('click', () => {
-            burger.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
-
+        function openMenu() {
+            burger.classList.add('active');
+            navLinks.classList.add('active');
+            menuOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Блокируем прокрутку
+        }
+        
+        function closeMenu() {
+            burger.classList.remove('active');
+            navLinks.classList.remove('active');
+            menuOverlay.classList.remove('active');
+            document.body.style.overflow = ''; // Восстанавливаем прокрутку
+        }
+        
+        burger.addEventListener('click', openMenu);
+        menuClose.addEventListener('click', closeMenu);
+        menuOverlay.addEventListener('click', closeMenu);
+        
+        // Закрытие по клику на ссылку
         navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                burger.classList.remove('active');
-                navLinks.classList.remove('active');
-            });
+            link.addEventListener('click', closeMenu);
         });
 
         // === FAQ ===
@@ -1367,19 +1439,6 @@
                     target.scrollIntoView({ behavior: 'smooth' });
                 }
             });
-        });
-
-        // === Управление 3D (заглушки) ===
-        document.getElementById('zoomInBtn')?.addEventListener('click', () => {
-            // Здесь будет логика зума
-        });
-        
-        document.getElementById('zoomOutBtn')?.addEventListener('click', () => {
-            // Здесь будет логика зума
-        });
-        
-        document.getElementById('resetViewBtn')?.addEventListener('click', () => {
-            // Здесь будет сброс вида
         });
     </script>
 </body>
